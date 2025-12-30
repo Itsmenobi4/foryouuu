@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>— 💌 𝙎.𝙞𝙙/𝙩𝙚𝙧𝙡𝙪𝙘𝙪 💞</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    /* Custom Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(1deg); }
+    }
+    
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    @keyframes slideInLetter {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      100% { transform: translateY(-180px) rotate(-2deg); opacity: 1; }
+    }
+    
+    @keyframes flapOpen {
+      0% { transform: rotateX(0deg); }
+      100% { transform: rotateX(180deg); }
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    @keyframes floatHearts {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+    
+    /* Custom Styles */
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    .animate-heartbeat {
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    
+    /* Envelope Styles */
+    .envelope-container {
+      perspective: 1000px;
+    }
+    
+    .envelope {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      transition: transform 0.3s ease;
+    }
+    
+    .envelope-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, #ff9bb4, #ff6b9d);
+      border-radius: 8px;
+      box-shadow: 
+        0 15px 35px rgba(255, 107, 157, 0.4),
+        inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      z-index: 2;
+    }
+    
+    .envelope-body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+      z-index: 1;
+    }
+    
+    .envelope-flap {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 100px solid transparent;
+      border-top: 100px solid #ff4d8d;
+      top: -100px;
+      left: 0;
+      transform-origin: top;
+      z-index: 3;
+      filter: drop-shadow(0 -3px 5px rgba(0, 0, 0, 0.2));
+      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    .envelope-open .envelope-flap {
+      animation: flapOpen 0.8s forwards;
+    }
+    
+    .envelope-seal {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(145deg, #ffd166, #ff9e00);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .envelope-seal:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .envelope-seal i {
+      color: white;
+      font-size: 24px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Letter Styles */
+    .letter {
+      position: absolute;
+      width: 280px;
+      height: 380px;
+      background: linear-gradient(to bottom, #fffaf0, #fff5e6);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.15),
+        inset 0 0 0 1px rgba(255, 107, 157, 0.1),
+        inset 0 0 30px rgba(255, 107, 157, 0.05);
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      overflow: hidden;
+      font-family: 'Dancing Script', cursive;
+    }
+    
+    .letter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, rgba(255, 107, 157, 0.1), transparent);
+      z-index: 1;
+    }
+    
+    .letter-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .letter-line {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 107, 157, 0.3), transparent);
+      left: 0;
+    }
+    
+    .letter-line:nth-child(1) { top: 80px; }
+    .letter-line:nth-child(2) { top: 100px; }
+    .letter-line:nth-child(3) { top: 120px; }
+    .letter-line:nth-child(4) { top: 140px; }
+    .letter-line:nth-child(5) { top: 160px; }
+    .letter-line:nth-child(6) { top: 180px; }
+    
+    .letter-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ff9bb4;
+    }
+    
+    .corner-tl {
+      top: 15px;
+      left: 15px;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 8px 0 0 0;
+    }
+    
+    .corner-tr {
+      top: 15px;
+      right: 15px;
+      border-left: none;
+      border-bottom: none;
+      border-radius: 0 8px 0 0;
+    }
+    
+    .corner-bl {
+      bottom: 15px;
+      left: 15px;
+      border-right: none;
+      border-top: none;
+      border-radius: 0 0 0 8px;
+    }
+    
+    .corner-br {
+      bottom: 15px;
+      right: 15px;
+      border-left: none;
+      border-top: none;
+      border-radius: 0 0 8px 0;
+    }
+    
+    .letter-open {
+      animation: slideInLetter 1.2s 0.8s forwards cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    .letter-closed {
+      transform: translate(-50%, 50%);
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    /* Heart Container */
+    .heart-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      animation: floatHearts 5s linear forwards;
+    }
+    
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #ff6b9d, #ff9bb4);
+      border-radius: 10px;
+    }
+  </style>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'love-pink': '#ff6b9d',
+            'love-pink-light': '#ff9bb4',
+            'love-pink-dark': '#ff4d8d',
+            'love-yellow': '#ffd166',
+            'love-bg-dark': '#1a0b2e',
+            'love-bg-light': '#2d1b4e',
+            'paper-beige': '#fffaf0',
+            'paper-light': '#fff5e6'
+          },
+          fontFamily: {
+            'dancing': ['Dancing Script', 'cursive'],
+            'poppins': ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 4s ease-in-out infinite',
+            'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
+            'fade-in': 'fadeIn 1s ease-in-out forwards',
+          },
+          backdropBlur: {
+            'xs': '2px',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-love-bg-dark via-purple-900/50 to-love-bg-light text-white font-poppins min-h-screen overflow-x-hidden">
+  
+  <!-- Background Elements -->
+  <div class="fixed inset-0 z-0 overflow-hidden">
+    <!-- Animated Gradient Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/10 to-blue-900/20"></div>
+    
+    <!-- Floating Hearts Background -->
+    <div id="floating-hearts" class="absolute inset-0 overflow-hidden"></div>
+  </div>
+  
+  <!-- Main Content Container -->
+  <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-8 animate__animated animate__fadeIn">
+      <h1 class="text-4xl md:text-5xl font-dancing font-bold mb-4 bg-gradient-to-r from-love-pink to-love-yellow bg-clip-text text-transparent">
+        Untukmu, Sayangku 💌
+      </h1>
+      <p class="text-lg text-pink-200">Buka surat cintaku yang penuh kejutan!</p>
+    </div>
+    
+    <!-- Envelope Container -->
+    <div class="envelope-container mb-12">
+      <div id="envelope" class="envelope animate-float">
+        <!-- Envelope Body -->
+        <div class="envelope-body">
+          <!-- Decorative Lines on Envelope -->
+          <div class="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+          <div class="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div class="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          
+          <!-- Address Area (simulated) -->
+          <div class="absolute top-6 left-6">
+            <div class="text-white/70 text-sm font-bold">KEPADA:</div>
+            <div class="text-white text-lg font-dancing mt-1">Sayangku Tersayang 💖</div>
+          </div>
+          
+          <!-- Stamp Area -->
+          <div class="absolute top-6 right-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-love-yellow to-amber-500 rounded-lg rotate-12 flex items-center justify-center">
+              <div class="text-center text-white">
+                <div class="text-xs font-bold">LOVE</div>
+                <div class="text-lg font-bold">💌</div>
+                <div class="text-xs font-bold">MAIL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Envelope Flap -->
+        <div class="envelope-flap" id="envelope-flap"></div>
+        
+        <!-- Seal -->
+        <div class="envelope-seal" id="envelope-seal">
+          <i class="fas fa-heart"></i>
+        </div>
+        
+        <!-- Letter (Hidden inside envelope) -->
+        <div id="letter" class="letter letter-closed">
+          <!-- Letter Lines -->
+          <div class="letter-line"></div>
+          <div class="letter-line"></div>
+          <div class="letter-line"></div>
+          <div class="letter-line"></div>
+          <div class="letter-line"></div>
+          <div class="letter-line"></div>
+          
+          <!-- Letter Corners -->
+          <div class="letter-corner corner-tl"></div>
+          <div class="letter-corner corner-tr"></div>
+          <div class="letter-corner corner-bl"></div>
+          <div class="letter-corner corner-br"></div>
+          
+          <!-- Letter Content -->
+          <div class="letter-content">
+            <div class="text-center mb-8">
+              <div class="text-5xl text-love-pink mb-4 animate-heartbeat">💌</div>
+              <h2 class="text-3xl font-dancing text-love-pink-dark font-bold mb-2">
+                Untukmu yang tersayang...
+              </h2>
+              <div class="w-24 h-1 bg-gradient-to-r from-transparent via-love-pink to-transparent mx-auto"></div>
+            </div>
+            
+            <div class="text-center px-4">
+              <p class="text-gray-700 text-lg mb-4">
+                Hari ini, aku cuma ingin mengingatkanmu...
+              </p>
+              <p class="text-gray-800 text-xl font-dancing mb-6">
+                Kamu adalah <span class="text-love-pink-dark font-bold">alasan</span> senyumku,<br>
+                Kamu adalah <span class="text-love-pink-dark font-bold">sumber</span> bahagiaku,<br>
+                Kamu adalah <span class="text-love-pink-dark font-bold">segala</span> yang aku butuhkan.
+              </p>
+              <div class="text-gray-600 text-sm mt-8">
+                <p>Dengan cinta yang tak terhingga,</p>
+                <p class="font-dancing text-xl text-love-pink-dark mt-2">- Yang selalu mencintaimu 💖</p>
+              </div>
+            </div>
+            
+            <!-- Secret Note (only visible after letter opens) -->
+            <div id="secret-note" class="mt-8 p-4 bg-pink-50/80 rounded-lg border border-pink-200 hidden">
+              <p class="text-pink-800 text-sm italic">
+                P.S. Ini baru awal kejutan kita!<br>
+                Ada lebih banyak yang menantimu... 😘
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Heart Container for Animation -->
+      <div class="heart-container" id="heart-container"></div>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="text-center mb-8 animate__animated animate__fadeIn animate__delay-1s">
+      <p class="text-pink-200 text-sm mb-2">
+        <i class="fas fa-mouse-pointer mr-2"></i>Klik segel hati untuk membuka surat
+      </p>
+      <div class="flex items-center justify-center space-x-2 text-yellow-200">
+        <i class="fas fa-star animate-spin"></i>
+        <span class="text-sm">Ada kejutan spesial menantimu!</span>
+        <i class="fas fa-star animate-spin"></i>
+      </div>
+    </div>
+    
+    <!-- Action Button (Initially Hidden) -->
+    <div id="action-button" class="hidden animate__animated animate__fadeInUp">
+      <button onclick="proceedToNextPage()" 
+        class="px-8 py-4 bg-gradient-to-r from-love-pink to-love-pink-dark text-white font-semibold rounded-full shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-heartbeat">
+        <i class="fas fa-arrow-right mr-3"></i>Lanjutkan Kejutan
+      </button>
+    </div>
+    
+    <!-- Next Page Container (Hidden Initially) -->
+    <div id="next-page" class="hidden w-full max-w-md mt-12">
+      <div class="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+        <div class="text-center mb-6">
+          <div class="text-4xl mb-4 animate-heartbeat">🎉</div>
+          <h2 class="text-2xl font-bold text-white mb-2">Yeay! Surat Terbuka! 💖</h2>
+          <p class="text-pink-200">Sekarang lanjutkan petualangan cinta kita...</p>
+        </div>
+        
+        <div class="space-y-4">
+          <button onclick="startMemoryGame()" 
+            class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+            <i class="fas fa-gamepad mr-3"></i>Main Game Memory Cinta
+          </button>
+          
+          <button onclick="viewLoveMessage()" 
+            class="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+            <i class="fas fa-heart mr-3"></i>Lihat Pesan Cinta Lengkap
+          </button>
+          
+          <button onclick="sendReply()" 
+            class="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+            <i class="fab fa-whatsapp mr-3"></i>Balas via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-clear-love-1099.mp3" type="audio/mpeg">
+  </audio>
+  
+  <!-- Audio Controls -->
+  <div class="fixed bottom-4 right-4 z-20">
+    <button id="music-toggle" class="w-12 h-12 rounded-full bg-gradient-to-r from-love-pink to-love-pink-dark flex items-center justify-center shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300">
+      <i id="music-icon" class="fas fa-music text-white"></i>
+    </button>
+  </div>
+
+  <script>
+    // State Variables
+    let isEnvelopeOpen = false;
+    let musicPlaying = false;
+    
+    // DOM Elements
+    const envelope = document.getElementById('envelope');
+    const envelopeFlap = document.getElementById('envelope-flap');
+    const envelopeSeal = document.getElementById('envelope-seal');
+    const letter = document.getElementById('letter');
+    const actionButton = document.getElementById('action-button');
+    const nextPage = document.getElementById('next-page');
+    const bgMusic = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const heartContainer = document.getElementById('heart-container');
+    const secretNote = document.getElementById('secret-note');
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create floating hearts background
+      createFloatingHearts();
+      
+      // Set up envelope seal click event
+      envelopeSeal.addEventListener('click', openEnvelope);
+      
+      // Set up music toggle
+      musicToggle.addEventListener('click', toggleMusic);
+      
+      // Try to play music on user interaction
+      document.body.addEventListener('click', function initMusic() {
+        if (!musicPlaying) {
+          bgMusic.volume = 0.3;
+          bgMusic.play().then(() => {
+            musicPlaying = true;
+            musicIcon.className = 'fas fa-volume-up text-white';
+          }).catch(e => console.log("Music autoplay prevented"));
+        }
+        document.body.removeEventListener('click', initMusic);
+      });
+    });
+    
+    // Open Envelope Function
+    function openEnvelope() {
+      if (isEnvelopeOpen) return;
+      
+      isEnvelopeOpen = true;
+      
+      // Add open class to envelope
+      envelope.classList.add('envelope-open');
+      
+      // Disable seal
+      envelopeSeal.style.pointerEvents = 'none';
+      envelopeSeal.style.opacity = '0.7';
+      
+      // Play sound effect (simulated)
+      playSoundEffect();
+      
+      // Animate flap opening
+      envelopeFlap.style.transform = 'rotateX(180deg)';
+      
+      // Wait for flap to open, then slide out letter
+      setTimeout(() => {
+        // Change letter class to open
+        letter.classList.remove('letter-closed');
+        letter.classList.add('letter-open');
+        
+        // Create hearts explosion
+        createHeartsExplosion();
+        
+        // Show secret note after delay
+        setTimeout(() => {
+          secretNote.classList.remove('hidden');
+          secretNote.classList.add('animate__animated', 'animate__fadeIn');
+        }, 1500);
+        
+        // Show action button after letter is fully out
+        setTimeout(() => {
+          actionButton.classList.remove('hidden');
+          actionButton.classList.add('animate__animated', 'animate__fadeInUp');
+        }, 2000);
+      }, 800);
+    }
+    
+    // Create Floating Hearts Background
+    function createFloatingHearts() {
+      const container = document.getElementById('floating-hearts');
+      if (!container) return;
+      
+      const heartEmojis = ['💖', '💘', '💝', '💕', '💗', '💓'];
+      
+      for (let i = 0; i < 12; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'absolute text-2xl';
+        heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.top = `${Math.random() * 100}%`;
+        heart.style.opacity = Math.random() * 0.4 + 0.2;
+        heart.style.animation = `float ${Math.random() * 15 + 10}s linear infinite`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        heart.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        container.appendChild(heart);
+      }
+    }
+    
+    // Create Hearts Explosion Animation
+    function createHeartsExplosion() {
+      const heartEmojis = ['💖', '💘', '💝', '💕', '💗', '💓'];
+      
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.fontSize = `${Math.random() * 20 + 16}px`;
+        heart.style.animationDelay = `${Math.random() * 2}s`;
+        
+        // Random direction
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        heart.style.setProperty('--direction', direction);
+        
+        heartContainer.appendChild(heart);
+        
+        // Remove heart after animation completes
+        setTimeout(() => {
+          if (heart.parentNode === heartContainer) {
+            heartContainer.removeChild(heart);
+          }
+        }, 5000);
+      }
+    }
+    
+    // Play Sound Effect
+    function playSoundEffect() {
+      // Create a simple sound effect using Web Audio API
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      } catch (e) {
+        console.log("Sound effect failed:", e);
+      }
+    }
+    
+    // Toggle Background Music
+    function toggleMusic() {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicIcon.className = 'fas fa-volume-mute text-white';
+        musicPlaying = false;
+      } else {
+        bgMusic.play().then(() => {
+          musicIcon.className = 'fas fa-volume-up text-white';
+          musicPlaying = true;
+        }).catch(e => {
+          console.log("Music play failed:", e);
+          // Ask user to interact first
+          alert("Silakan klik di luar tombol musik terlebih dahulu untuk mengaktifkan audio.");
+        });
+      }
+    }
+    
+    // Proceed to Next Page
+    function proceedToNextPage() {
+      // Hide action button with animation
+      actionButton.classList.add('animate__animated', 'animate__fadeOut');
+      
+      // Show next page after delay
+      setTimeout(() => {
+        actionButton.classList.add('hidden');
+        nextPage.classList.remove('hidden');
+        nextPage.classList.add('animate__animated', 'animate__fadeIn');
+      }, 500);
+    }
+    
+    // Navigation Functions
+    function startMemoryGame() {
+      alert("Game memory akan dimulai! (Fitur ini dapat dikembangkan lebih lanjut)");
+      // Here you would typically navigate to a memory game page
+    }
+    
+    function viewLoveMessage() {
+      // Create a beautiful love message modal
+      const loveMessage = `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div class="bg-gradient-to-br from-paper-beige to-paper-light rounded-2xl p-8 max-w-md w-full max-h-[80vh] overflow-y-auto custom-scroll shadow-2xl border-2 border-love-pink/30">
+            <div class="text-center mb-6">
+              <div class="text-5xl text-love-pink mb-4 animate-heartbeat">💝</div>
+              <h3 class="text-3xl font-dancing text-love-pink-dark font-bold">Untuk Sayangku Tersayang</h3>
+              <div class="w-32 h-1 bg-gradient-to-r from-transparent via-love-pink to-transparent mx-auto mt-2"></div>
+            </div>
+            
+            <div class="space-y-4 text-gray-700">
+              <p class="text-lg font-dancing">Sayangku yang cantik/lucu/ganteng...</p>
+              
+              <p>Aku cuma mau bilang betapa bersyukurnya aku memilikimu dalam hidupku.</p>
+              
+              <p class="bg-pink-50 p-4 rounded-lg border-l-4 border-love-pink">
+                <span class="font-dancing text-xl text-love-pink-dark">"Kamu membuat setiap hariku lebih berarti, setiap senyumku lebih tulus, dan setiap detik bersamamu lebih berharga."</span>
+              </p>
+              
+              <p>Terima kasih sudah menjadi:</p>
+              <ul class="list-disc list-inside space-y-2 ml-4">
+                <li>Teman terbaikku</li>
+                <li>Kekasih tercintaku</li>
+                <li>Alasan aku tersenyum setiap hari</li>
+                <li>Rumah bagi hatiku</li>
+              </ul>
+              
+              <p class="text-center mt-6">
+                <span class="text-2xl font-dancing text-love-pink-dark">Aku mencintaimu lebih dari kata-kata bisa ungkapkan.</span>
+              </p>
+              
+              <div class="text-center mt-8 pt-6 border-t border-pink-200">
+                <p class="text-gray-600">Selamanya milikmu,</p>
+                <p class="font-dancing text-2xl text-love-pink-dark mt-2">- Yang selalu mencintaimu 💖</p>
+              </div>
+            </div>
+            
+            <button onclick="closeModal()" class="mt-8 w-full py-3 bg-gradient-to-r from-love-pink to-love-pink-dark text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              Tutup Pesan Cinta
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Add modal to body
+      const modalContainer = document.createElement('div');
+      modalContainer.innerHTML = loveMessage;
+      modalContainer.id = 'love-message-modal';
+      document.body.appendChild(modalContainer);
+      
+      // Add close function to global scope
+      window.closeModal = function() {
+        const modal = document.getElementById('love-message-modal');
+        if (modal) {
+          modal.classList.add('animate__animated', 'animate__fadeOut');
+          setTimeout(() => {
+            document.body.removeChild(modal);
+          }, 500);
+        }
+      };
+    }
+    
+    function sendReply() {
+      const message = "Aku sudah membuka surat cintamu! Terima kasih sayang, aku sangat menyukainya! 💖";
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+    }
+  </script>
+</body>
+</html>
